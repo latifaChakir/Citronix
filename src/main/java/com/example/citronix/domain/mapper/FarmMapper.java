@@ -11,8 +11,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface FarmMapper {
     Farm toEntity(CreateFarmRequestDto dto);
-//    @Mapping(source = "fields.size", target = "fieldCount")
     FarmResponseVM toDto(Farm farm);
-
     List<FarmResponseVM> toDtoList(List<Farm> farms);
 }

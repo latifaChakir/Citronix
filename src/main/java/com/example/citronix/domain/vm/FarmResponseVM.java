@@ -1,7 +1,13 @@
 package com.example.citronix.domain.vm;
 
-import java.time.LocalDate;
+import lombok.*;
 
+import java.time.LocalDate;
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class FarmResponseVM {
     private Long id;
     private String name;
