@@ -9,6 +9,7 @@ import com.example.citronix.domain.entity.Farm;
 import com.example.citronix.domain.mapper.FarmMapper;
 import com.example.citronix.repository.FarmRepository;
 import com.example.citronix.service.interfaces.FarmService;
+import com.example.citronix.service.interfaces.FieldService;
 import com.example.citronix.shared.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class FarmServiceImpl implements FarmService {
     private final FarmRepository farmRepository;
     private final FarmMapper farmMapper;
     private final FieldMapper fieldMapper;
+    private FieldService fieldService;
     @Override
     public FarmResponseVM createFarm(CreateFarmRequestDto farmRequestDto) {
         if (farmRequestDto.getCreationDate().isAfter(LocalDate.now())) {
@@ -89,9 +91,9 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public void deleteFarm(Long id) {
-        if (farmRepository.findById(id).isEmpty()) {
-            throw new FarmNotFoundException("Farm not found");
-        }
-        farmRepository.deleteById(id);
+        Farm farm = farmRepository.findById(id)
+                .orElseThrow(() -> new FarmNotFoundException("Farm not found"));
+        farmRepository.delete(farm);
     }
+
 }

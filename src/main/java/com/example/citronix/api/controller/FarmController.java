@@ -38,6 +38,12 @@ public class FarmController {
         ApiResponse<FarmResponseVM> apiResponse = ApiResponse.success(response, "/api/farms/" + id);
         return ResponseEntity.ok(apiResponse);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<String>> deleteFarm(@PathVariable Long id) {
+        farmService.deleteFarm(id);
+        ApiResponse<String> apiResponse = ApiResponse.success("Farm deleted successfully", "/api/farms/" + id);
+        return ResponseEntity.ok(apiResponse);
+    }
 
 
 }
