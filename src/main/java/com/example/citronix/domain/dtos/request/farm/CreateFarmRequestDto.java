@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class createFarmRequestDto {
+public class CreateFarmRequestDto {
     @NotBlank(message = "Name is required")
     private String name;
     @NotBlank(message = "Location is required")
