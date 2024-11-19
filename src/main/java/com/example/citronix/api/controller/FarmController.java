@@ -44,6 +44,12 @@ public class FarmController {
         ApiResponse<String> apiResponse = ApiResponse.success("Farm deleted successfully", "/api/farms/" + id);
         return ResponseEntity.ok(apiResponse);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<FarmResponseVM>> updateFarm(@PathVariable Long id, @Valid @RequestBody CreateFarmRequestDto farmRequestDto) {
+        FarmResponseVM response = farmService.updateFarm(id, farmRequestDto);
+        ApiResponse<FarmResponseVM> apiResponse = ApiResponse.success(response, "/api/farms/" + id);
+        return ResponseEntity.ok(apiResponse);
+    }
 
 
 }

@@ -68,7 +68,6 @@ public class FarmServiceImpl implements FarmService {
         return farmMapper.toDto(savedFarm);
     }
 
-
     @Override
     public List<FarmResponseVM> getAllFarms() {
         List<Farm> farms = farmRepository.findAll();
@@ -86,7 +85,51 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public FarmResponseVM updateFarm(Long id, CreateFarmRequestDto farmRequestDto) {
-        return null;
+        Farm existingFarm = farmRepository.findById(id)
+                .orElseThrow(() -> new FarmNotFoundException("Farm not found"));
+        if (farmRequestDto.getCreationDate().isAfter(LocalDate.now())) {
+            throw new InvalidFarmCreationDateException("La date de création ne peut pas être dans le futur.");
+        }
+        if (!existingFarm.getName().equals(farmRequestDto.getName())
+                || !existingFarm.getLocation().equals(farmRequestDto.getLocation())) {
+            if (farmRepository.existsByNameAndLocation(farmRequestDto.getName(), farmRequestDto.getLocation())) {
+                throw new FarmAlreadyExistsException("Une ferme avec le même nom et localisation existe déjà.");
+            }
+        }
+        if (farmRequestDto.getFields() != null && !farmRequestDto.getFields().isEmpty()) {
+            double totalFieldArea = farmRequestDto.getFields().stream()
+                    .mapToDouble(FramWithFieldRequest::getArea)
+                    .sum();
+
+            if (totalFieldArea >= farmRequestDto.getArea()) {
+                throw new TotalFieldAreaExceedsFarmAreaException("La somme des superficies des champs ne peut pas dépasser celle de la ferme.");
+            }
+
+            for (FramWithFieldRequest field : farmRequestDto.getFields()) {
+                if (field.getArea() < 0.1 || field.getArea() > farmRequestDto.getArea() / 2) {
+                    throw new InvalidFieldAreaException(
+                            String.format("La superficie de chaque champ (%s m²) doit être comprise entre 0.1 hectare et 50%% de la superficie totale.", field.getArea())
+                    );
+                }
+            }
+        }
+        existingFarm.setName(farmRequestDto.getName());
+        existingFarm.setLocation(farmRequestDto.getLocation());
+        existingFarm.setArea(farmRequestDto.getArea());
+        existingFarm.setCreationDate(farmRequestDto.getCreationDate());
+        if (farmRequestDto.getFields() != null && !farmRequestDto.getFields().isEmpty()) {
+            List<Field> updatedFields = farmRequestDto.getFields().stream().map(fieldRequest -> {
+                Field field = fieldMapper.toEntity(fieldRequest);
+                field.setFarm(existingFarm);
+                return field;
+            }).collect(Collectors.toList());
+            existingFarm.getFields().clear();
+            existingFarm.getFields().addAll(updatedFields);
+        } else {
+            existingFarm.getFields().clear();
+        }
+        Farm updatedFarm = farmRepository.save(existingFarm);
+        return farmMapper.toDto(updatedFarm);
     }
 
     @Override
