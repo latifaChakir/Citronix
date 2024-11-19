@@ -1,6 +1,6 @@
 package com.example.citronix.api.advice;
 
-import com.example.citronix.domain.dtos.wrapper.ApiResponse;
+import com.example.citronix.domain.vm.wrapper.ApiResponse;
 import com.example.citronix.shared.exception.FarmNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,14 +1,14 @@
 package com.example.citronix.service.interfaces;
 
 import com.example.citronix.domain.dtos.request.farm.CreateFarmRequestDto;
-import com.example.citronix.domain.dtos.response.FarmResponseDto;
+import com.example.citronix.domain.vm.FarmResponseVM;
 
 import java.util.List;
 
 public interface FarmService {
-    FarmResponseDto createFarm(CreateFarmRequestDto farmRequestDto);
-    List<FarmResponseDto> getAllFarms();
-    FarmResponseDto getFarmById(Long id);
-    FarmResponseDto updateFarm(Long id, CreateFarmRequestDto farmRequestDto);
+    FarmResponseVM createFarm(CreateFarmRequestDto farmRequestDto);
+    List<FarmResponseVM> getAllFarms();
+    FarmResponseVM getFarmById(Long id);
+    FarmResponseVM updateFarm(Long id, CreateFarmRequestDto farmRequestDto);
     void deleteFarm(Long id);
 }

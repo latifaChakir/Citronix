@@ -1,4 +1,4 @@
-package com.example.citronix.domain.dtos.wrapper;
+package com.example.citronix.domain.vm.wrapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

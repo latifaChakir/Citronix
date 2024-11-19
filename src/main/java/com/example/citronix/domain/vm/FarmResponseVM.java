@@ -1,8 +1,8 @@
-package com.example.citronix.domain.dtos.response;
+package com.example.citronix.domain.vm;
 
 import java.time.LocalDate;
 
-public class FarmResponseDto {
+public class FarmResponseVM {
     private Long id;
     private String name;
     private String location;
