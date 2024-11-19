@@ -3,6 +3,8 @@ package com.example.citronix.domain.vm;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Builder
 @Getter
 @Setter
@@ -14,5 +16,5 @@ public class FarmResponseVM {
     private String location;
     private Double area;
     private LocalDate creationDate;
-    private int fieldCount;
+    private List<FieldResponseVM> fields;
 }

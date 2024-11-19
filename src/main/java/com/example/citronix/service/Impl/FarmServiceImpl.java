@@ -62,7 +62,6 @@ public class FarmServiceImpl implements FarmService {
 
             farm.setFields(fields);
         }
-
         Farm savedFarm = farmRepository.save(farm);
         return farmMapper.toDto(savedFarm);
     }
@@ -90,6 +89,9 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public void deleteFarm(Long id) {
-
+        if (farmRepository.findById(id).isEmpty()) {
+            throw new FarmNotFoundException("Farm not found");
+        }
+        farmRepository.deleteById(id);
     }
 }
