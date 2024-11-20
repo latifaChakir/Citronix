@@ -1,6 +1,7 @@
 package com.example.citronix.api.controller;
 
 import com.example.citronix.domain.dtos.request.farm.CreateFarmRequestDto;
+import com.example.citronix.domain.dtos.request.farm.FarmSearchCriteriaDto;
 import com.example.citronix.domain.vm.FarmResponseVM;
 import com.example.citronix.domain.vm.wrapper.ApiResponse;
 import com.example.citronix.service.interfaces.FarmService;
@@ -48,6 +49,12 @@ public class FarmController {
     public ResponseEntity<ApiResponse<FarmResponseVM>> updateFarm(@PathVariable Long id, @Valid @RequestBody CreateFarmRequestDto farmRequestDto) {
         FarmResponseVM response = farmService.updateFarm(id, farmRequestDto);
         ApiResponse<FarmResponseVM> apiResponse = ApiResponse.success(response, "/api/farms/" + id);
+        return ResponseEntity.ok(apiResponse);
+    }
+    @PostMapping("/search")
+    public ResponseEntity<ApiResponse<List<FarmResponseVM>>> searchFarms(@Valid @RequestBody FarmSearchCriteriaDto farmSearchCriteriaDto) {
+        List<FarmResponseVM> response = farmService.searchFarms(farmSearchCriteriaDto);
+        ApiResponse<List<FarmResponseVM>> apiResponse = ApiResponse.success(response, "/api/farms/search");
         return ResponseEntity.ok(apiResponse);
     }
 
