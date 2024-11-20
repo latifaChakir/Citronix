@@ -1,6 +1,6 @@
 package com.example.citronix.domain.dtos.request.farm;
 
-import com.example.citronix.domain.dtos.request.field.FramWithFieldRequest;
+import com.example.citronix.domain.dtos.request.field.FramWithFieldRequestdTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -25,5 +25,5 @@ public class CreateFarmRequestDto {
     @NotNull(message = "Creation date is required")
     private LocalDate creationDate;
     @Valid
-    private List<FramWithFieldRequest> fields;
+    private List<FramWithFieldRequestdTO> fields;
 }

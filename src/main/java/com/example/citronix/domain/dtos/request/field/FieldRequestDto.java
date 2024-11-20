@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class FieldRequest {
+public class FieldRequestDto {
     @NotBlank(message = "Field name is required")
     private String name;
 

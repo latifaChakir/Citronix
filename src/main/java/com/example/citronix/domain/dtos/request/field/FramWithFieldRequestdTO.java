@@ -10,7 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class FramWithFieldRequest {
+public class FramWithFieldRequestdTO {
     @NotBlank(message = "Field name is required")
     private String name;
 

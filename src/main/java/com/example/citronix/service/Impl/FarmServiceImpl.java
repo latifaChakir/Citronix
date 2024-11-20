@@ -1,7 +1,7 @@
 package com.example.citronix.service.Impl;
 
 import com.example.citronix.domain.dtos.request.farm.CreateFarmRequestDto;
-import com.example.citronix.domain.dtos.request.field.FramWithFieldRequest;
+import com.example.citronix.domain.dtos.request.field.FramWithFieldRequestdTO;
 import com.example.citronix.domain.entity.Field;
 import com.example.citronix.domain.mapper.FieldMapper;
 import com.example.citronix.domain.vm.FarmResponseVM;
@@ -37,14 +37,14 @@ public class FarmServiceImpl implements FarmService {
 
         if (farmRequestDto.getFields() != null && !farmRequestDto.getFields().isEmpty()) {
             double totalFieldArea = farmRequestDto.getFields().stream()
-                    .mapToDouble(FramWithFieldRequest::getArea)
+                    .mapToDouble(FramWithFieldRequestdTO::getArea)
                     .sum();
 
             if (totalFieldArea >= farmRequestDto.getArea()) {
                 throw new TotalFieldAreaExceedsFarmAreaException("La somme des superficies des champs ne peut pas dépasser celle de la ferme.");
             }
 
-            for (FramWithFieldRequest field : farmRequestDto.getFields()) {
+            for (FramWithFieldRequestdTO field : farmRequestDto.getFields()) {
                 if (field.getArea() < 0.1 || field.getArea() > farmRequestDto.getArea() / 2) {
                     throw new InvalidFieldAreaException(
                             String.format("La superficie de chaque champ (%s m²) doit être comprise entre 0.1 hectare et 50%% de la superficie totale.", field.getArea())
@@ -98,14 +98,14 @@ public class FarmServiceImpl implements FarmService {
         }
         if (farmRequestDto.getFields() != null && !farmRequestDto.getFields().isEmpty()) {
             double totalFieldArea = farmRequestDto.getFields().stream()
-                    .mapToDouble(FramWithFieldRequest::getArea)
+                    .mapToDouble(FramWithFieldRequestdTO::getArea)
                     .sum();
 
             if (totalFieldArea >= farmRequestDto.getArea()) {
                 throw new TotalFieldAreaExceedsFarmAreaException("La somme des superficies des champs ne peut pas dépasser celle de la ferme.");
             }
 
-            for (FramWithFieldRequest field : farmRequestDto.getFields()) {
+            for (FramWithFieldRequestdTO field : farmRequestDto.getFields()) {
                 if (field.getArea() < 0.1 || field.getArea() > farmRequestDto.getArea() / 2) {
                     throw new InvalidFieldAreaException(
                             String.format("La superficie de chaque champ (%s m²) doit être comprise entre 0.1 hectare et 50%% de la superficie totale.", field.getArea())
