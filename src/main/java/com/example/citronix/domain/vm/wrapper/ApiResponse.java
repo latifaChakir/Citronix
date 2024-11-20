@@ -1,4 +1,5 @@
 package com.example.citronix.domain.vm.wrapper;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class ApiResponse<T> {
     private boolean success;
     private String traceId;
 
+    // Méthode pour répondre avec une réussite
     public static <T> ApiResponse<T> success(T data, String path) {
         return ApiResponse.<T>builder()
                 .data(data)
@@ -31,6 +33,7 @@ public class ApiResponse<T> {
                 .build();
     }
 
+    // Méthode pour répondre avec une erreur
     public static <T> ApiResponse<T> error(String message, String path, int statusCode) {
         return ApiResponse.<T>builder()
                 .message(message)
@@ -42,6 +45,7 @@ public class ApiResponse<T> {
                 .build();
     }
 
+    // Génération d'un traceId unique
     private static String generateTraceId() {
         return "trace-" + LocalDateTime.now().toString();
     }

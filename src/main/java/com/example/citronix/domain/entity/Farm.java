@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,7 @@ public class Farm {
     private Double area;
     private LocalDate creationDate;
     @OneToMany(mappedBy = "farm", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Field> fields;
+    private List<Field> fields = new ArrayList<>();
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
