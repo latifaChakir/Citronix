@@ -1,6 +1,7 @@
 package com.example.citronix.service.Impl;
 
 import com.example.citronix.domain.dtos.request.farm.CreateFarmRequestDto;
+import com.example.citronix.domain.dtos.request.farm.FarmSearchCriteriaDto;
 import com.example.citronix.domain.dtos.request.field.FramWithFieldRequestdTO;
 import com.example.citronix.domain.entity.Field;
 import com.example.citronix.domain.mapper.FieldMapper;
@@ -8,6 +9,7 @@ import com.example.citronix.domain.vm.FarmResponseVM;
 import com.example.citronix.domain.entity.Farm;
 import com.example.citronix.domain.mapper.FarmMapper;
 import com.example.citronix.repository.FarmRepository;
+import com.example.citronix.repository.specification.FarmSpecification;
 import com.example.citronix.service.interfaces.FarmService;
 import com.example.citronix.service.interfaces.FieldService;
 import com.example.citronix.shared.exception.*;
@@ -140,6 +142,12 @@ public class FarmServiceImpl implements FarmService {
         Farm farm = farmRepository.findById(id)
                 .orElseThrow(() -> new FarmNotFoundException("Farm not found"));
         farmRepository.delete(farm);
+    }
+
+    @Override
+    public List<FarmResponseVM> searchFarms(FarmSearchCriteriaDto searchCriteria) {
+        List<Farm> farms = farmRepository.findAll(FarmSpecification.getFarmByCriteria(searchCriteria));
+        return farmMapper.toDtoList(farms);
     }
 
 }

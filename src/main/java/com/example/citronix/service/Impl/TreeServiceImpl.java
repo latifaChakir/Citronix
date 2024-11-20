@@ -37,7 +37,6 @@ public class TreeServiceImpl implements TreeService {
         }
         Field field = fieldRepository.findById(tree.getField().getId()).orElseThrow(()->new FieldNotFoundException("champ n'existe pas"));
         int currentCountTrees = field.getTrees().size();
-        // fallait etre en m2
         int maxAllowedTrees = (int) (10 * field.getArea() / 1000);
         if (currentCountTrees >= maxAllowedTrees) {
             throw new MaxTreeDensityExceededException("Le champ ne peut pas contenir plus de " + maxAllowedTrees + " arbres.");
