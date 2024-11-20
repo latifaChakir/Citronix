@@ -14,6 +14,8 @@ import com.example.citronix.shared.exception.InvalidPlantationPeriodException;
 import com.example.citronix.shared.exception.MaxTreeDensityExceededException;
 import com.example.citronix.shared.exception.TreeNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,9 +46,9 @@ public class TreeServiceImpl implements TreeService {
     }
 
     @Override
-    public List<TreeResponseVM> getAllTrees() {
-        List<Tree> trees = treeRepository.findAll();
-        return treeMapper.toDtoList(trees);
+    public Page<TreeResponseVM> getAllTrees(PageRequest pageRequest) {
+        Page<Tree> trees = treeRepository.findAll(pageRequest);
+        return trees.map(treeMapper::toDto);
     }
 
     @Override

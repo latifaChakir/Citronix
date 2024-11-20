@@ -6,6 +6,8 @@ import com.example.citronix.domain.vm.wrapper.ApiResponse;
 import com.example.citronix.service.interfaces.TreeService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +27,15 @@ public class TreeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
     @GetMapping("/all")
-    public ResponseEntity<ApiResponse<List<TreeResponseVM>>> getAllTrees() {
-        List<TreeResponseVM> response = treeService.getAllTrees();
-        ApiResponse<List<TreeResponseVM>> apiResponse = ApiResponse.success(response, "/api/trees/");
+    public ResponseEntity<ApiResponse<Page<TreeResponseVM>>> getAllTrees(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<TreeResponseVM> response = treeService.getAllTrees(pageRequest);
+        ApiResponse<Page<TreeResponseVM>> apiResponse = ApiResponse.success(response, "/api/trees/all");
         return ResponseEntity.ok(apiResponse);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<TreeResponseVM>> getTreeById(@PathVariable Long id) {
         TreeResponseVM response = treeService.getTreeById(id);
