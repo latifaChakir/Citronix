@@ -47,7 +47,7 @@ public class FarmServiceImpl implements FarmService {
             for (FramWithFieldRequestdTO field : farmRequestDto.getFields()) {
                 if (field.getArea() < 1000 || field.getArea() > farmRequestDto.getArea() / 2) {
                     throw new InvalidFieldAreaException(
-                            String.format("La superficie de chaque champ (%s m²) doit être comprise entre 0.1 hectare et 50%% de la superficie totale.", field.getArea())
+                            String.format("La superficie de chaque champ (%s m²) doit être comprise entre 1000 m² et 50%% de la superficie totale.", field.getArea())
                     );
                 }
             }
@@ -109,9 +109,9 @@ public class FarmServiceImpl implements FarmService {
             }
 
             for (FramWithFieldRequestdTO field : farmRequestDto.getFields()) {
-                if (field.getArea() < 0.1 || field.getArea() > farmRequestDto.getArea() / 2) {
+                if (field.getArea() < 1000 || field.getArea() > farmRequestDto.getArea() / 2) {
                     throw new InvalidFieldAreaException(
-                            String.format("La superficie de chaque champ (%s m²) doit être comprise entre 0.1 hectare et 50%% de la superficie totale.", field.getArea())
+                            String.format("La superficie de chaque champ (%s m²) doit être comprise entre 1000 m² et 50%% de la superficie totale.", field.getArea())
                     );
                 }
             }
