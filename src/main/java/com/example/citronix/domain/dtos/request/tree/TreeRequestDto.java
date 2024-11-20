@@ -11,13 +11,9 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class TreeRequest {
+public class TreeRequestDto {
     @NotNull(message = "Plantation date is required")
     private LocalDate plantationDate;
-
-    @NotNull(message = "Tree status is required")
-    private TreeStatus status;
-
     @NotNull(message = "Field ID is required")
     private Long fieldId;
 }

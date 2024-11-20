@@ -85,6 +85,25 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(InvalidPlantationPeriodException.class)
+    public ResponseEntity<ApiResponse<String>> handleInvalidPlantationPeriodException(InvalidPlantationPeriodException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/trees",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MaxTreeDensityExceededException.class)
+    public ResponseEntity<ApiResponse<String>> handleMaxTreeDensityExceededException(MaxTreeDensityExceededException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/trees",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 
 }
