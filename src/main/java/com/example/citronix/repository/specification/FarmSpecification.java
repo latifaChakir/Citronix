@@ -10,6 +10,8 @@ import jakarta.persistence.criteria.Predicate;
 
 public class FarmSpecification {
     public static Specification<Farm> getFarmByCriteria(FarmSearchCriteriaDto criteria) {
+
+        // TODO SEARCH THE FARM
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
