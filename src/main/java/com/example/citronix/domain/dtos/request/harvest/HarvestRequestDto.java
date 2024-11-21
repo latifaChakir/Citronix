@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class HarvestRequest {
+public class HarvestRequestDto {
     @NotNull(message = "Season is required")
     private SeasonType season;
 
