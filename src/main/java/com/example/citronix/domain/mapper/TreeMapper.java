@@ -13,6 +13,7 @@ import java.util.List;
 public interface TreeMapper {
     @Mapping(source = "fieldId", target = "field.id")
     Tree toEntity(TreeRequestDto treeRequestDto);
+    Tree toEntity(TreeResponseVM treeResponseVM);
     @Mapping(source = "field.id", target = "fieldId")
     @Mapping(source = "status", target = "status")
     TreeResponseVM toDto(Tree tree);

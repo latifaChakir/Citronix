@@ -16,4 +16,5 @@ public class HarvestResponseVM {
     private LocalDate harvestDate;
     private Double totalQuantity;
     private Long fieldId;
+    private FieldResponseVM field;
 }

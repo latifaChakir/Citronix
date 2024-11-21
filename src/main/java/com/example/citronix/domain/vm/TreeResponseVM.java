@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TreeResponseVM {
+    private Long id;
     private LocalDate plantationDate;
     private TreeStatus status;
     private Long fieldId;

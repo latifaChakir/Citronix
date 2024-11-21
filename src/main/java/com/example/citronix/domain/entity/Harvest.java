@@ -30,4 +30,8 @@ public class Harvest {
 
     @OneToMany(mappedBy = "harvest", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HarvestDetail> harvestDetails;
+
+    public void calculateTotalQuantity() {
+        this.totalQuantity = harvestDetails.stream().mapToDouble(HarvestDetail::getQuantity).sum();
+    }
 }

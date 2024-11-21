@@ -94,4 +94,10 @@ public class TreeServiceImpl implements TreeService {
         }
         treeRepository.deleteById(id);
     }
+
+    @Override
+    public List<TreeResponseVM> findByFieldId(Long fieldId) {
+        List<Tree> trees = treeRepository.findByFieldId(fieldId);
+     return treeMapper.toDtoList(trees);
+    }
 }
