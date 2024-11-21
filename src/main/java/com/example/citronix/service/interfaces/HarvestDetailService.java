@@ -2,6 +2,7 @@ package com.example.citronix.service.interfaces;
 
 import com.example.citronix.domain.dtos.request.harvestDetail.HarvestDetailRequestDto;
 import com.example.citronix.domain.entity.HarvestDetail;
+import com.example.citronix.domain.entity.Tree;
 import com.example.citronix.domain.enums.SeasonType;
 import com.example.citronix.domain.vm.HarvestDetailResponseVM;
 import com.example.citronix.domain.vm.TreeResponseVM;
@@ -19,5 +20,5 @@ public interface HarvestDetailService {
 
     void saveAll(List<HarvestDetail> harvestDetails);
 
-    boolean existsByTreeAndSeason(TreeResponseVM tree, SeasonType season);
+    boolean existsByTreeAndSeason(Tree tree, SeasonType season);
 }

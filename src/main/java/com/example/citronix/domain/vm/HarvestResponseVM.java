@@ -4,6 +4,7 @@ import com.example.citronix.domain.enums.SeasonType;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 @Getter
@@ -15,6 +16,6 @@ public class HarvestResponseVM {
     private SeasonType season;
     private LocalDate harvestDate;
     private Double totalQuantity;
-    private Long fieldId;
-    private FieldResponseVM field;
+    private List<HarvestDetailResponseVM> harvestDetails;
+
 }

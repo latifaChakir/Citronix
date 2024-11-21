@@ -24,10 +24,6 @@ public class Harvest {
     private LocalDate harvestDate;
     private Double totalQuantity;
 
-    @ManyToOne
-    @JoinColumn(name = "field_id")
-    private Field field;
-
     @OneToMany(mappedBy = "harvest", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HarvestDetail> harvestDetails;
 

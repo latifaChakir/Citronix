@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1732214722063-2
+      author: Youcode
+      changes:
+        - dropColumn:
+            columnName: field_id
+            tableName: harvests

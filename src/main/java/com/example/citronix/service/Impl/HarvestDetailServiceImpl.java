@@ -2,6 +2,7 @@ package com.example.citronix.service.Impl;
 
 import com.example.citronix.domain.dtos.request.harvestDetail.HarvestDetailRequestDto;
 import com.example.citronix.domain.entity.HarvestDetail;
+import com.example.citronix.domain.entity.Tree;
 import com.example.citronix.domain.enums.SeasonType;
 import com.example.citronix.domain.vm.HarvestDetailResponseVM;
 import com.example.citronix.domain.vm.TreeResponseVM;
@@ -54,7 +55,7 @@ public class HarvestDetailServiceImpl implements HarvestDetailService {
     }
 
     @Override
-    public boolean existsByTreeAndSeason(TreeResponseVM tree, SeasonType season) {
+    public boolean existsByTreeAndSeason(Tree tree, SeasonType season) {
         return harvestDetailRepository.existsByTreeIdAndSeason(tree.getId(), season);
     }
 }

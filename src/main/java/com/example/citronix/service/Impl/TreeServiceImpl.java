@@ -59,6 +59,7 @@ public class TreeServiceImpl implements TreeService {
         TreeStatus status = tree.calculateStatus();
 
         return TreeResponseVM.builder()
+                .id(tree.getId())
                 .plantationDate(tree.getPlantationDate())
                 .status(status)
                 .fieldId(tree.getField().getId())

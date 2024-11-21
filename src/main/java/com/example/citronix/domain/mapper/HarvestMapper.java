@@ -13,12 +13,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 
 public interface HarvestMapper {
-    @Mapping(target = "field.id", source = "fieldId")
 
     Harvest toEntity(HarvestRequestDto harvestRequestDto);
-
-    @Mapping(target = "fieldId", source = "field.id")
-    @Mapping(target = "field", source = "field")
+    @Mapping(target = "harvestDetails", source = "harvestDetails")
     HarvestResponseVM toDTO(Harvest savedHarvest);
 
     List<HarvestResponseVM> toDtoList(List<Harvest> harvestResponses);

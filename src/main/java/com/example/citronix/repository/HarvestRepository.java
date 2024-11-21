@@ -6,5 +6,5 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HarvestRepository extends JpaRepository<Harvest, Long> {
-    boolean existsBySeasonAndFieldId(SeasonType season, @NotNull(message = "Field ID is required") Long fieldId);
+    boolean existsBySeason(SeasonType season);
 }

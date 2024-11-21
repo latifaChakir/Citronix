@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,20 +34,47 @@ public class HarvestServiceImpl implements HarvestService {
     private final HarvestRepository harvestRepository;
     private final HarvestMapper harvestMapper;
     private final FieldRepository fieldRepository;
+    private final TreeService treeService;
+    private final HarvestDetailService harvestDetailService;
+    private final TreeMapper treeMapper;
 
     @Override
     public HarvestResponseVM saveHarvest(HarvestRequestDto harvestRequestDto) {
         SeasonType season = getSeasonFromDate(harvestRequestDto.getHarvestDate());
         Harvest harvest = harvestMapper.toEntity(harvestRequestDto);
         harvest.setSeason(season);
-        Field field = fieldRepository.findById(harvestRequestDto.getFieldId())
-                .orElseThrow(() -> new IllegalArgumentException("Field not found"));
-        if (harvestRepository.existsBySeasonAndFieldId(season, harvestRequestDto.getFieldId())) {
-            throw new DuplicateHarvestException("Une récolte existe déjà pour ce champ et cette saison.");
-        }
-        harvest.setField(field);
+        List<HarvestDetail> harvestDetails = harvestRequestDto.getHarvestDetails()
+                .stream().map(detail -> {
+            TreeResponseVM treeResponseVM = treeService.getTreeById(detail.getTreeId());
+            Tree tree= treeMapper.toEntity(treeResponseVM);
+            validateTreeForHarvest(tree, season);
+
+            HarvestDetail harvestDetail = new HarvestDetail();
+            harvestDetail.setTree(tree);
+            harvestDetail.setQuantity(detail.getQuantity());
+            harvestDetail.setHarvest(harvest);
+            return harvestDetail;
+        }).collect(Collectors.toList());
+
+        harvest.setHarvestDetails(harvestDetails);
         Harvest savedHarvest = harvestRepository.save(harvest);
+
+        harvestDetailService.saveAll(harvestDetails);
         return harvestMapper.toDTO(savedHarvest);
+    }
+    private void validateTreeForHarvest(Tree tree, SeasonType season) {
+        if (tree == null) {
+            throw new HarvestNotFoundException("L'arbre spécifié n'existe pas.");
+        }
+
+        if (tree.getPlantationDate().plusYears(20).isBefore(LocalDate.now())) {
+            throw new HarvestNotFoundException("L'arbre avec ID " + tree.getId() + " n'est plus productif.");
+        }
+
+        if (harvestDetailService.existsByTreeAndSeason(tree, season)) {
+            throw new DuplicateHarvestException("L'arbre avec ID " + tree.getId() + " a déjà été récolté pour cette saison.");
+        }
+
     }
 
     @Override
@@ -70,7 +98,6 @@ public class HarvestServiceImpl implements HarvestService {
         existingHarvest.setSeason(getSeasonFromDate(harvestRequestDto.getHarvestDate()));
         existingHarvest.setHarvestDate(harvestRequestDto.getHarvestDate());
         Harvest updatedHarvest = harvestRepository.save(existingHarvest);
-
         return harvestMapper.toDTO(updatedHarvest);
     }
 
@@ -97,5 +124,19 @@ public class HarvestServiceImpl implements HarvestService {
             default -> throw new IllegalArgumentException("Mois invalide: " + month);
         };
 }
+
+    private double calculateTreeProductivity(Tree tree) {
+        long age = ChronoUnit.YEARS.between(tree.getPlantationDate(), LocalDate.now());
+        if (age < 3) {
+            return 2.5;
+        } else if (age <= 10) {
+            return 12.0;
+        } else if (age <= 20) {
+            return 20.0;
+        }
+        return 0.0;
+    }
 }
+
+
 

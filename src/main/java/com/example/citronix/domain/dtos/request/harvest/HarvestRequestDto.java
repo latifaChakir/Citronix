@@ -17,11 +17,9 @@ import java.util.List;
 @Setter
 @Builder
 public class HarvestRequestDto {
-
     @NotNull(message = "Harvest date is required")
     private LocalDate harvestDate;
-
-    @NotNull(message = "Field ID is required")
-    private Long fieldId;
+    @Valid
+    private List<HarvestWithDetailsRequest> harvestDetails;
 
 }
