@@ -23,10 +23,6 @@ public class SaleRequestDto {
     @NotBlank(message = "Client is required")
     private String client;
 
-    @NotNull(message = "Revenue is required")
-    @Min(value = 1, message = "Revenue must be greater than zero")
-    private Double revenue;
-
     @NotNull(message = "Harvest ID is required")
     private Long harvestId;
 }

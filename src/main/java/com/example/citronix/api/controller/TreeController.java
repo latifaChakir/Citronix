@@ -1,6 +1,5 @@
 package com.example.citronix.api.controller;
 import com.example.citronix.domain.dtos.request.tree.TreeRequestDto;
-import com.example.citronix.domain.vm.FarmResponseVM;
 import com.example.citronix.domain.vm.TreeResponseVM;
 import com.example.citronix.domain.vm.wrapper.ApiResponse;
 import com.example.citronix.service.interfaces.TreeService;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/trees")
