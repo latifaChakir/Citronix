@@ -125,5 +125,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SaleNotFoundException.class)
+    public ResponseEntity<ApiResponse<String>> handleSaleNotFoundException(SaleNotFoundException ex) {
+        ApiResponse<String> response = ApiResponse.error(
+                ex.getMessage(),
+                "/api/sales",
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 
 }
