@@ -19,6 +19,8 @@ import com.example.citronix.service.interfaces.HarvestService;
 import com.example.citronix.service.interfaces.TreeService;
 import com.example.citronix.shared.exception.DuplicateHarvestException;
 import com.example.citronix.shared.exception.HarvestNotFoundException;
+import com.example.citronix.shared.exception.TreeNotFoundException;
+import com.example.citronix.shared.exception.TreeNotProductif;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,29 +48,38 @@ public class HarvestServiceImpl implements HarvestService {
         List<HarvestDetail> harvestDetails = harvestRequestDto.getHarvestDetails()
                 .stream().map(detail -> {
             TreeResponseVM treeResponseVM = treeService.getTreeById(detail.getTreeId());
+                    if (treeResponseVM == null) {
+                        throw new TreeNotFoundException("Tree with id " + detail.getTreeId() + " not found");
+                    }
             Tree tree= treeMapper.toEntity(treeResponseVM);
-            validateTreeForHarvest(tree, season);
+            validateTreeForHarvest(tree, season,harvest.getHarvestDate());
 
             HarvestDetail harvestDetail = new HarvestDetail();
             harvestDetail.setTree(tree);
-            harvestDetail.setQuantity(detail.getQuantity());
+            double harvestQuantity=tree.getProductivity();
+            harvestDetail.setQuantity(harvestQuantity);
             harvestDetail.setHarvest(harvest);
             return harvestDetail;
         }).collect(Collectors.toList());
 
         harvest.setHarvestDetails(harvestDetails);
+        harvest.calculateTotalQuantity();
         Harvest savedHarvest = harvestRepository.save(harvest);
 
         harvestDetailService.saveAll(harvestDetails);
         return harvestMapper.toDTO(savedHarvest);
     }
-    private void validateTreeForHarvest(Tree tree, SeasonType season) {
+    private void validateTreeForHarvest(Tree tree, SeasonType season, LocalDate harvestDate) {
         if (tree == null) {
-            throw new HarvestNotFoundException("L'arbre spécifié n'existe pas.");
+            throw new TreeNotFoundException("L'arbre spécifié n'existe pas.");
         }
 
-        if (tree.getPlantationDate().plusYears(20).isBefore(LocalDate.now())) {
-            throw new HarvestNotFoundException("L'arbre avec ID " + tree.getId() + " n'est plus productif.");
+        if (tree.getPlantationDate().plusYears(20).isBefore(harvestDate)) {
+            throw new TreeNotProductif("L'arbre avec ID " + tree.getId() + " n'est plus productif.");
+        }
+        double productivity = calculateTreeProductivity(tree,harvestDate);
+        if (productivity == 0.0) {
+            throw new TreeNotProductif("L'arbre avec ID " + tree.getId() + " n'est plus productif.");
         }
 
         if (harvestDetailService.existsByTreeAndSeason(tree, season)) {
@@ -125,8 +136,8 @@ public class HarvestServiceImpl implements HarvestService {
         };
 }
 
-    private double calculateTreeProductivity(Tree tree) {
-        long age = ChronoUnit.YEARS.between(tree.getPlantationDate(), LocalDate.now());
+    private double calculateTreeProductivity(Tree tree, LocalDate harvestDate) {
+        long age = ChronoUnit.YEARS.between(tree.getPlantationDate(), harvestDate);
         if (age < 3) {
             return 2.5;
         } else if (age <= 10) {

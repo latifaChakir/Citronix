@@ -13,11 +13,8 @@ public interface HarvestDetailService {
     HarvestDetailResponseVM saveHarvestDetail(HarvestDetailRequestDto HarvestDetailRequestDto);
     List<HarvestDetailResponseVM> getAllHarvestDetails();
     HarvestDetailResponseVM getHarvestDetailById(Long id);
-    HarvestDetailResponseVM updateHarvestDetail(Long id, HarvestDetailRequestDto HarvestDetailRequestDto);
+//    HarvestDetailResponseVM updateHarvestDetail(Long id, HarvestDetailRequestDto HarvestDetailRequestDto);
     void deleteHarvestDetail(Long id);
-    List<HarvestDetailResponseVM> getListDetail(List<TreeResponseVM> trees);
-
-
     void saveAll(List<HarvestDetail> harvestDetails);
 
     boolean existsByTreeAndSeason(Tree tree, SeasonType season);

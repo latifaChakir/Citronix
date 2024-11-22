@@ -18,4 +18,5 @@ public class HarvestResponseVM {
     private Double totalQuantity;
     private List<HarvestDetailResponseVM> harvestDetails;
 
+
 }
