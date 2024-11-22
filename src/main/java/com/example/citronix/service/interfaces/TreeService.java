@@ -13,4 +13,5 @@ public interface TreeService {
     TreeResponseVM getTreeById(Long id);
     TreeResponseVM updateTree(Long id, TreeRequestDto treeRequestDto);
     void deleteTree(Long id);
+    List<TreeResponseVM> findByFieldId(Long fieldId);
 }

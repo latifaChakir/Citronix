@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class SaleRequest {
+public class SaleRequestDto {
     @NotNull(message = "Sale date is required")
     private LocalDate date;
 

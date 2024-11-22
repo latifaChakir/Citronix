@@ -59,6 +59,7 @@ public class TreeServiceImpl implements TreeService {
         TreeStatus status = tree.calculateStatus();
 
         return TreeResponseVM.builder()
+                .id(tree.getId())
                 .plantationDate(tree.getPlantationDate())
                 .status(status)
                 .fieldId(tree.getField().getId())
@@ -93,5 +94,11 @@ public class TreeServiceImpl implements TreeService {
             throw new TreeNotFoundException("Arbre non trouvé");
         }
         treeRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TreeResponseVM> findByFieldId(Long fieldId) {
+        List<Tree> trees = treeRepository.findByFieldId(fieldId);
+     return treeMapper.toDtoList(trees);
     }
 }

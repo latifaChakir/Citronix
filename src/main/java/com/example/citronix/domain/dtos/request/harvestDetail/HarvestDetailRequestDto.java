@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class HarvestDetailRequest {
+public class HarvestDetailRequestDto {
     @NotNull(message = "Quantity is required")
     @Min(value = 1, message = "Quantity must be greater than zero")
     private Double quantity;
