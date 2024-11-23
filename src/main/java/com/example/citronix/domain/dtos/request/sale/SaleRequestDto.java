@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class SaleRequest {
+public class SaleRequestDto {
     @NotNull(message = "Sale date is required")
     private LocalDate date;
 
@@ -22,10 +22,6 @@ public class SaleRequest {
 
     @NotBlank(message = "Client is required")
     private String client;
-
-    @NotNull(message = "Revenue is required")
-    @Min(value = 1, message = "Revenue must be greater than zero")
-    private Double revenue;
 
     @NotNull(message = "Harvest ID is required")
     private Long harvestId;

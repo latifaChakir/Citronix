@@ -1,17 +1,21 @@
 package com.example.citronix.domain.dtos.request.farm;
 
+import com.example.citronix.domain.dtos.request.field.FramWithFieldRequestdTO;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class createFarmRequestDto {
+public class CreateFarmRequestDto {
     @NotBlank(message = "Name is required")
     private String name;
     @NotBlank(message = "Location is required")
@@ -20,4 +24,6 @@ public class createFarmRequestDto {
     private Double area;
     @NotNull(message = "Creation date is required")
     private LocalDate creationDate;
+    @Valid
+    private List<FramWithFieldRequestdTO> fields;
 }

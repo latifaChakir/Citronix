@@ -10,14 +10,11 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class FieldRequest {
+public class FramWithFieldRequestdTO {
     @NotBlank(message = "Field name is required")
     private String name;
 
     @NotNull(message = "Field area is required")
     @Min(value = 1000, message = "Field area must be at least 1,000 m²")
     private Double area;
-
-    @NotNull(message = "Farm ID is required")
-    private Long farmId;
 }
