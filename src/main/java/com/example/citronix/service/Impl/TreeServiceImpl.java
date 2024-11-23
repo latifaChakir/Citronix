@@ -54,7 +54,7 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public TreeResponseVM getTreeById(Long id) {
         Tree tree = treeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Arbre non trouvé."));
+                .orElseThrow(() -> new TreeNotFoundException("Arbre non trouvé."));
 
         TreeStatus status = tree.calculateStatus();
 
@@ -71,13 +71,13 @@ public class TreeServiceImpl implements TreeService {
     @Override
     public TreeResponseVM updateTree(Long id, TreeRequestDto treeRequestDto) {
         Tree existingTree = treeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Arbre non trouvé."));
+                .orElseThrow(() -> new TreeNotFoundException("Arbre non trouvé."));
         existingTree.setPlantationDate(treeRequestDto.getPlantationDate());
         existingTree.setStatus(existingTree.calculateStatus());
 
         if (treeRequestDto.getFieldId() != null) {
             Field field = fieldRepository.findById(treeRequestDto.getFieldId())
-                    .orElseThrow(() -> new IllegalArgumentException("Champ non trouvé."));
+                    .orElseThrow(() -> new FieldNotFoundException("Champ non trouvé."));
             existingTree.setField(field);
         }
         if (existingTree.getPlantationDate().getMonthValue() < 3 || existingTree.getPlantationDate().getMonthValue() > 5) {

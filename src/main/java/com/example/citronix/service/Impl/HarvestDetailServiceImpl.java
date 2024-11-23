@@ -1,6 +1,7 @@
 package com.example.citronix.service.Impl;
 
 import com.example.citronix.domain.dtos.request.harvestDetail.HarvestDetailRequestDto;
+import com.example.citronix.domain.entity.Harvest;
 import com.example.citronix.domain.entity.HarvestDetail;
 import com.example.citronix.domain.entity.Tree;
 import com.example.citronix.domain.enums.SeasonType;
@@ -17,6 +18,7 @@ import com.example.citronix.service.interfaces.TreeService;
 import com.example.citronix.shared.exception.DuplicateHarvestException;
 import com.example.citronix.shared.exception.HarvestNotFoundException;
 import com.example.citronix.shared.exception.TreeNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
+
 public class HarvestDetailServiceImpl implements HarvestDetailService {
     private final HarvestDetailRepository harvestDetailRepository;
     private final HarvestDetailMapper harvestDetailMapper;
@@ -117,6 +121,18 @@ public class HarvestDetailServiceImpl implements HarvestDetailService {
     public boolean existsByTreeAndSeason(Tree tree, SeasonType season) {
         return harvestDetailRepository.existsByTreeIdAndSeason(tree.getId(), season);
     }
+
+    @Override
+    public void deleteAllByHarvestId(Long harvestId) {
+        Harvest harvest = harvestRepository.findById(harvestId)
+                .orElseThrow(() -> new HarvestNotFoundException("Harvest not found"));
+        harvest.getHarvestDetails().clear();
+
+        harvestRepository.save(harvest);
+    }
+
+
+
     private double calculateTreeProductivity(Tree tree, LocalDate harvestDate) {
         long age = ChronoUnit.YEARS.between(tree.getPlantationDate(), harvestDate);
         if (age < 3) {

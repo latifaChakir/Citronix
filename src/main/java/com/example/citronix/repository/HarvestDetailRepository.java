@@ -7,9 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface HarvestDetailRepository extends JpaRepository<HarvestDetail,Long> {
     @Query("SELECT CASE WHEN COUNT(hd) > 0 THEN TRUE ELSE FALSE END " +
             "FROM HarvestDetail hd " +
             "WHERE hd.tree.id = :treeId AND hd.harvest.season = :season")
     boolean existsByTreeIdAndSeason(@Param("treeId") Long treeId, @Param("season") SeasonType season);
+
+    @Query("DELETE FROM HarvestDetail hd WHERE hd.harvest.id = :harvestId")
+    void deleteByHarvestId(@Param("harvestId") Long harvestId);
 }
