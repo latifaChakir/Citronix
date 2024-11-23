@@ -18,4 +18,6 @@ public interface HarvestDetailService {
     void saveAll(List<HarvestDetail> harvestDetails);
 
     boolean existsByTreeAndSeason(Tree tree, SeasonType season);
+
+    void deleteAllByHarvestId(Long id);
 }

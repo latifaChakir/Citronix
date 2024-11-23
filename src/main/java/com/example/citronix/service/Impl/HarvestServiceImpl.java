@@ -1,5 +1,5 @@
 package com.example.citronix.service.Impl;
-
+import org.hibernate.Hibernate;
 import com.example.citronix.domain.dtos.request.harvest.HarvestRequestDto;
 import com.example.citronix.domain.entity.Harvest;
 import com.example.citronix.domain.entity.HarvestDetail;
@@ -18,11 +18,13 @@ import com.example.citronix.shared.exception.DuplicateHarvestException;
 import com.example.citronix.shared.exception.HarvestNotFoundException;
 import com.example.citronix.shared.exception.TreeNotFoundException;
 import com.example.citronix.shared.exception.TreeNotProductif;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,16 +100,42 @@ public class HarvestServiceImpl implements HarvestService {
     }
 
     @Override
+
+
     public HarvestResponseVM updateHarvest(Long id, HarvestRequestDto harvestRequestDto) {
         Harvest existingHarvest = harvestRepository.findById(id)
                 .orElseThrow(() -> new HarvestNotFoundException("Récolte introuvable avec l'ID: " + id));
 
-        existingHarvest.setSeason(getSeasonFromDate(harvestRequestDto.getHarvestDate()));
+        SeasonType season = getSeasonFromDate(harvestRequestDto.getHarvestDate());
+        existingHarvest.setSeason(season);
         existingHarvest.setHarvestDate(harvestRequestDto.getHarvestDate());
-        Harvest updatedHarvest = harvestRepository.save(existingHarvest);
-        return harvestMapper.toDTO(updatedHarvest);
-    }
+        harvestDetailService.deleteAllByHarvestId(id);
+        List<HarvestDetail> harvestDetails = harvestRequestDto.getHarvestDetails()
+                .stream().map(detail -> {
+                    TreeResponseVM treeResponseVM = treeService.getTreeById(detail.getTreeId());
+                    if (treeResponseVM == null) {
+                        throw new TreeNotFoundException("Tree with id " + detail.getTreeId() + " not found");
+                    }
+                    Tree tree = treeMapper.toEntity(treeResponseVM);
+                    validateTreeForHarvest(tree, season, existingHarvest.getHarvestDate());
 
+                    HarvestDetail harvestDetail = new HarvestDetail();
+                    harvestDetail.setTree(tree);
+                    harvestDetail.setQuantity(tree.getProductivity());
+                    harvestDetail.setHarvest(existingHarvest);
+                    return harvestDetail;
+                }).collect(Collectors.toList());
+
+        double totalQuantity = harvestDetails.stream()
+                .mapToDouble(HarvestDetail::getQuantity)
+                .sum();
+        existingHarvest.setTotalQuantity(totalQuantity);
+        harvestRepository.save(existingHarvest);
+        harvestDetailService.saveAll(harvestDetails);
+
+        existingHarvest.setHarvestDetails(harvestDetails);
+        return harvestMapper.toDTO(existingHarvest);
+    }
     @Override
     public void deleteHarvest(Long id) {
         if (!harvestRepository.existsById(id)) {
