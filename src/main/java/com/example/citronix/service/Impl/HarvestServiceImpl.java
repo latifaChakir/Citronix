@@ -1,19 +1,16 @@
 package com.example.citronix.service.Impl;
 
 import com.example.citronix.domain.dtos.request.harvest.HarvestRequestDto;
-import com.example.citronix.domain.entity.Field;
 import com.example.citronix.domain.entity.Harvest;
 import com.example.citronix.domain.entity.HarvestDetail;
 import com.example.citronix.domain.entity.Tree;
 import com.example.citronix.domain.enums.SeasonType;
 import com.example.citronix.domain.mapper.HarvestMapper;
 import com.example.citronix.domain.mapper.TreeMapper;
-import com.example.citronix.domain.vm.HarvestDetailResponseVM;
 import com.example.citronix.domain.vm.HarvestResponseVM;
 import com.example.citronix.domain.vm.TreeResponseVM;
 import com.example.citronix.repository.FieldRepository;
 import com.example.citronix.repository.HarvestRepository;
-import com.example.citronix.service.interfaces.FieldService;
 import com.example.citronix.service.interfaces.HarvestDetailService;
 import com.example.citronix.service.interfaces.HarvestService;
 import com.example.citronix.service.interfaces.TreeService;
@@ -26,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
