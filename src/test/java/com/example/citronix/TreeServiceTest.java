@@ -54,7 +54,7 @@ public class TreeServiceTest {
 
         Field field = new Field();
         field.setId(1L);
-        field.setArea(1000.0); // Area in m²
+        field.setArea(1000.0);
         field.setTrees(Collections.emptyList());
 
         Tree tree = new Tree();
